@@ -1,11 +1,11 @@
 # RAID (Redundant Array Of Independence Disk)
-Raid (Redundant Array Of Independent Disk) : est une technique de Virtualisation de stockage permettant de **regrouper plusieurs disques** afin _d'ameliorer_ les **performances ou la Tolerance aux pannes**.
+Raid (Redundant Array Of Independent Disk) : est une technique de Virtualisation de stockage permettant de **regrouper plusieurs disques** afin _d'améliorer_ les **performances ou la tolérance aux pannes**.
 
 | RAID 0 | RAID 1 | RAID 5 |
 | --------- | --------- | --------- |
-| Combine au moins deux disques :<br/> <br/> <ul><li>Les deux Disques Travaillent simultanement.</li> <br/> <li>Repartissant 50% des donnees sur un disque et 50% sur l'autre.</li> <br/> <li>performances deux fois plus élevée.</li></ul> | protection des données robuste  <br/>  <br/>  <ul><li>Le disque 1 contient les mêmes données que le disque 2.</li> <br/> <li>Ameliorer la securite de données</li></ul> |  l'équilibre entre protection des données et vitesse <br/><br/> <ul><li>Tolérance aux pannes</li><br/><li>Une partie pour le calcule</li><br/><li>performance elevee</li></ul> |
+| Combine au moins deux disques :<br/> <br/> <ul><li>Les deux Disques Travaillent simultanément.</li> <br/> <li>Répartissant 50% des donnees sur un disque et 50% sur l'autre.</li> <br/> <li>performances deux fois plus élevée.</li></ul> | protection des données robuste  <br/>  <br/>  <ul><li>Le disque 1 contient les mêmes données que le disque 2.</li> <br/> <li>Améliorer la sécurité de données</li></ul> |  l'équilibre entre protection des données et vitesse <br/><br/> <ul><li>Tolérance aux pannes</li><br/><li>Une partie pour le calcule</li><br/><li>performance élevée</li></ul> |
 
-## Les etapes pour Creer  RAID 0 sous Linux
+## Les étapes pour Créer RAID 0 sous Linux
 Lister les partitions disponibles :
 
 ```bash
@@ -16,15 +16,15 @@ sdb       931.5G  disk
 sdc       931.5G  disk
 └─sdc1    4G      part
 ```
-Utilise la commande mdadm (multi-disk administrator) pour creer un RAID
+Utilise la commande mdadm (multi-disk administrator) pour Créer un RAID
 ```bash
-# pour creer RAID 0 "--level=0"
+# pour Créer RAID 0 "--level=0"
 $ mdadm --verbos --create /dev/md0 --level=0 --raid-devices=2 /dev/sdb1 /dev/sdc1
 mdadm: chunk size defaults to 512K
 mdadm: Defaulting to version 1.2 metadata
 mdadm: array /dev/md0 started.
 ```
-Pour Verifier la creation du RAID
+Pour Vérifier la création du RAID
 ```bash
 lsblk -o NAME,SIZE,TYPE
 NAME      SIZE    TYPE
@@ -91,7 +91,7 @@ _Cela pourrait être utile si vous souhaitez simuler une panne ou si vous devez 
 $ mdadm /dev/md1 -f /dev/sdc1
 mdadm: set /dev/sdc1 faulty in /dev/md1
 ```
-verifier sur le fichier /proc/mdstat
+Vérifier sur le fichier /proc/mdstat
 ```bash
 $ cat /proc/mdstat
 Personalities : [raid0] [raid6] [raid5] [raid4]
@@ -102,7 +102,7 @@ unused devices: <none>
 ```
 > **Ici, nous voyons la partition que nous avons sélectionnée, marquée `(F)` pour échec.**
 
-Utilise la commande commande `mdadm --detail`
+Utilise la commande `mdadm --detail`
 ```bash
 $ mdadm --detail /dev/md1
 /dev/md1:
@@ -162,7 +162,7 @@ nous pouvons ajouter un `Spare Drive` dédié pour permettre à mdadm de bascule
 $ mdadm /dev/md1 --add-spare /dev/sdg1
 mdadm: added /dev/sdg1
 
-# Verifier
+# Vérifier
 $ mdadm --detail /dev/md1 | grep spare
 #       7       8       38        -      spare   /dev/sdg1
 ```
